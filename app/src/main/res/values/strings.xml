@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Super Mercado</string>
+    <string name="home_enter">Entrar</string>
+    <string name="purchase_list">Lista de Compras</string>
+    <string name="purchase_product_name">Nome do Produto</string>
+    <string name="purchase_quantity">Quantidade</string>
+    <string name="purchase_unit">Unidade</string>
+    <string name="purchase_add">Adicionar</string>
+    <string name="purchase">Compra</string>
+    <string name="purchase_save">Salvar</string>
+    <string name="purchase_edit">Editar</string>
+    <string name="purchase_refresh">Atualizar</string>
+</resources>
