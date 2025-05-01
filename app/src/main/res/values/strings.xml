@@ -4,6 +4,8 @@
     <string name="purchase_list">Lista de Compras</string>
     <string name="purchase_product_name">Nome do Produto</string>
     <string name="purchase_quantity">Quantidade</string>
+    <string name="purchase_cart">Carrinho</string>
+    <string name="purchase_category">Categoria</string>
     <string name="purchase_unit">Unidade</string>
     <string name="purchase_add">Adicionar</string>
     <string name="purchase">Compra</string>
