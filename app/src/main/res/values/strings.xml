@@ -10,4 +10,8 @@
     <string name="purchase_save">Salvar</string>
     <string name="purchase_edit">Editar</string>
     <string name="purchase_refresh">Atualizar</string>
+    <string name="title_activity_principal">PrincipalActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_purchase_pending">Pendentes</string>
+    <string name="title_purchase_cart">Carrinho</string>
 </resources>

@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.supermercado.view.PurchaseListActivity
+import com.example.supermercado.view.PrincipalActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnEnter = findViewById<Button>(R.id.btn_enter)
         btnEnter.setOnClickListener {
-            val intent = Intent(this@MainActivity, PurchaseListActivity::class.java)
+            val intent = Intent(this@MainActivity, PrincipalActivity::class.java)
             startActivity(intent)
         }
     }

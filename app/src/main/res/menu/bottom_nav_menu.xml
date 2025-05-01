@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_purchase_pending"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="@string/title_purchase_pending" />
+
+    <item
+        android:id="@+id/navigation_purchase_cart"
+        android:icon="@android:drawable/checkbox_on_background"
+        android:title="@string/title_purchase_cart" />
+
+</menu>
