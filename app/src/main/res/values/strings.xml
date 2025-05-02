@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Super Mercado</string>
+    <string name="home_user">Usuário</string>
+    <string name="home_password">Senha</string>
     <string name="home_enter">Entrar</string>
     <string name="purchase_list">Lista de Compras</string>
     <string name="purchase_product_name">Nome do Produto</string>
@@ -13,8 +15,15 @@
     <string name="purchase_delete">Excluir</string>
     <string name="purchase_edit">Editar</string>
     <string name="purchase_refresh">Atualizar</string>
-    <string name="title_activity_principal">PrincipalActivity</string>
+    <string name="title_activity_principal">Principal</string>
     <string name="title_home">Home</string>
     <string name="title_purchase_pending">Pendentes</string>
     <string name="title_purchase_cart">Carrinho</string>
+    <string name="message_confirm_purchase_delete">Tem certeza de que deseja excluir este item?</string>
+    <string name="title_message_information">Informação</string>
+    <string name="title_message_error">Erro</string>
+    <string name="title_message_confirmation">Confirmação</string>
+    <string name="user_password_not_filled">Usuário e senha não preenchidos</string>
+    <string name="login_error">Erro ao realizar o login</string>
+    <string name="purchase_get_error">Erro ao carregar lista</string>
 </resources>

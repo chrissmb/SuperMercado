@@ -2,6 +2,7 @@ package com.example.supermercado.view.ui.purchase
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,8 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
 import com.example.supermercado.adapter.AdapterPurchase
 import com.example.supermercado.service.ServiceLocator
+import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.view.PurchaseItemActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class PurchasePendingFragment : Fragment() {
@@ -39,7 +44,14 @@ class PurchasePendingFragment : Fragment() {
         adapterProduct = AdapterPurchase()
         recyclerViewProducts.adapter = adapterProduct
         adapterProduct.setOnLoadListListener {
-            purchaseService.getAll()
+            try {
+                purchaseService.getAll()
+            } catch (e: Exception) {
+                Log.e("AdapterPurchase", "Error loading purchase list", e)
+                val errorMessage = getString(R.string.purchase_get_error)
+                MessageUtil.showErrorMessage(errorMessage, requireContext())
+                emptyList()
+            }
         }
         adapterProduct.refresh()
 

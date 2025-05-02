@@ -13,6 +13,7 @@ import com.example.supermercado.model.Product
 import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.model.Purchase
 import com.example.supermercado.model.PurchaseUnit
+import com.example.supermercado.util.MessageUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PurchaseItemActivity : AppCompatActivity() {
@@ -79,15 +80,11 @@ class PurchaseItemActivity : AppCompatActivity() {
             if (purchase == null) {
                 throw IllegalStateException("Não é possível excluir um item que não existe.");
             }
-            val dialog = AlertDialog.Builder(this)
-            dialog.setTitle("Confirmação")
-            dialog.setMessage("Tem certeza de que deseja excluir este item?")
-            dialog.setPositiveButton("Sim") { _, _ ->
+            val message = getString(R.string.message_confirm_purchase_delete)
+            MessageUtil.showConfirmMessage(message, this) {
                 purchaseService.delete(purchase!!)
                 finish()
             }
-            dialog.setNegativeButton("Não", null)
-            dialog.show()
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.supermercado.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,11 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
+import com.example.supermercado.model.Product
 import com.example.supermercado.model.Purchase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>() {
 
@@ -17,7 +20,7 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
 
     private var onEditPurchaseListener: ((Purchase) -> Unit) = {}
     private var onCheckedChangeListener: ((Purchase) -> Unit) = {}
-    private var onLoadList: (() -> List<Purchase>) = { emptyList() }
+    private var onLoadList: suspend (() -> List<Purchase>) = { emptyList() }
 //    private var onLoadItem: (() -> Purchase) = {}
 
     inner class PurchaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,7 +41,7 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
     override fun onBindViewHolder(holder: PurchaseViewHolder, position: Int) {
         val currentItem = purchaseList[position]
         holder.productName.text = currentItem.product.name
-        holder.quantity.text = currentItem.quantity.toString()
+        holder.quantity.text = currentItem.quantity?.toString()
         holder.unit.text = currentItem.unit?.name
         holder.category.text = currentItem.product.category?.name
 
@@ -61,8 +64,12 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh() {
-        this.purchaseList = onLoadList.invoke()
+        purchaseList = listOf(loadingDummyPurchase())
         notifyDataSetChanged()
+        CoroutineScope(Dispatchers.Main).launch {
+            purchaseList = onLoadList.invoke()
+            notifyDataSetChanged()
+        }
     }
 
     fun setOnEditPurchaseListener(listener: (Purchase) -> Unit) {
@@ -73,7 +80,16 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
         onCheckedChangeListener = listener
     }
 
-    fun setOnLoadListListener(listener: () -> List<Purchase>) {
+    fun setOnLoadListListener(listener: suspend () -> List<Purchase>) {
         onLoadList = listener
+    }
+
+    private fun loadingDummyPurchase(): Purchase {
+        return Purchase(
+            null,
+            Product(null, "Carregando...", null),
+            null,
+            null,
+            false)
     }
 }

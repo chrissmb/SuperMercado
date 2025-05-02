@@ -4,9 +4,10 @@ import com.example.supermercado.model.Category
 import com.example.supermercado.model.Product
 import com.example.supermercado.model.Purchase
 import com.example.supermercado.model.PurchaseUnit
+import com.example.supermercado.external.PurchaseApi
 import java.util.UUID
 
-class PurchaseService {
+class PurchaseService(private val purchaseApi: PurchaseApi) {
 
     val purchases = mutableListOf(
         Purchase(
@@ -40,8 +41,9 @@ class PurchaseService {
     )
 
 
-    fun getAll(): List<Purchase> {
-        return purchases
+
+    suspend fun getAll(): List<Purchase> {
+        return purchaseApi.getPurchasePending()
     }
 
     fun insert(purchase: Purchase) {
