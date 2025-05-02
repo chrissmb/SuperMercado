@@ -1,9 +1,11 @@
 package com.example.supermercado.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
@@ -14,14 +16,18 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
     private var purchaseList = emptyList<Purchase>()
 
     private var onEditPurchaseListener: ((Purchase) -> Unit) = {}
-    private var onDeletePurchaseListener: ((Purchase) -> Unit) = {}
+    private var onCheckedChangeListener: ((Purchase) -> Unit) = {}
+    private var onLoadList: (() -> List<Purchase>) = { emptyList() }
+//    private var onLoadItem: (() -> Purchase) = {}
 
     inner class PurchaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productName: TextView = itemView.findViewById(R.id.tv_product_name)
         val quantity: TextView = itemView.findViewById(R.id.tv_quantity)
         val unit: TextView = itemView.findViewById(R.id.tv_unit)
+        var category : TextView = itemView.findViewById(R.id.tv_category)
+
+        val cart: CheckBox = itemView.findViewById(R.id.cb_cart)
         val btnEdit: TextView = itemView.findViewById(R.id.btn_edit_purchase)
-        val btnDelete: TextView = itemView.findViewById(R.id.btn_delete_purchase)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PurchaseViewHolder {
@@ -34,22 +40,28 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
         holder.productName.text = currentItem.product.name
         holder.quantity.text = currentItem.quantity.toString()
         holder.unit.text = currentItem.unit?.name
+        holder.category.text = currentItem.product.category?.name
+
+        holder.cart.setOnCheckedChangeListener(null)
+        holder.cart.isChecked = currentItem.cart
+        holder.cart.setOnCheckedChangeListener { _, isChecked ->
+            currentItem.cart = isChecked
+            onCheckedChangeListener.invoke(currentItem)
+            notifyItemChanged(position)
+        }
 
         holder.btnEdit.setOnClickListener {
             onEditPurchaseListener.invoke(currentItem)
-        }
-
-        holder.btnDelete.setOnClickListener {
-            onDeletePurchaseListener.invoke(currentItem)
-            notifyItemRemoved(position)
+            notifyItemChanged(position)
         }
     }
 
     override fun getItemCount(): Int = purchaseList.size
 
+
     @SuppressLint("NotifyDataSetChanged")
-    fun setProducts(purchases: List<Purchase>) {
-        this.purchaseList = purchases
+    fun refresh() {
+        this.purchaseList = onLoadList.invoke()
         notifyDataSetChanged()
     }
 
@@ -57,7 +69,11 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
         onEditPurchaseListener = listener
     }
 
-    fun setOnDeletePurchaseListener(listener: (Purchase) -> Unit) {
-        onDeletePurchaseListener = listener
+    fun setOnCheckedChangeListener(listener: (Purchase) -> Unit) {
+        onCheckedChangeListener = listener
+    }
+
+    fun setOnLoadListListener(listener: () -> List<Purchase>) {
+        onLoadList = listener
     }
 }

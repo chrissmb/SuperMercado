@@ -71,18 +71,6 @@
             android:padding="10dp"
             app:icon="@android:drawable/ic_menu_edit"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_delete_purchase"
-            app:layout_constraintTop_toTopOf="@id/tv_category" />
-
-        <Button
-            android:id="@+id/btn_delete_purchase"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:padding="10dp"
-            android:backgroundTint="@color/red"
-            app:icon="@android:drawable/ic_delete"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_category" />
 

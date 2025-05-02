@@ -7,7 +7,7 @@ import java.util.UUID
 data class Purchase(
     var uuid: UUID?,
     var product: Product,
-    var quantity: Double,
+    var quantity: Double?,
     var unit: PurchaseUnit?,
     var cart: Boolean,
 ): Serializable

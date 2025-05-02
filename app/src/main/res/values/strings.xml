@@ -10,6 +10,7 @@
     <string name="purchase_add">Adicionar</string>
     <string name="purchase">Compra</string>
     <string name="purchase_save">Salvar</string>
+    <string name="purchase_delete">Excluir</string>
     <string name="purchase_edit">Editar</string>
     <string name="purchase_refresh">Atualizar</string>
     <string name="title_activity_principal">PrincipalActivity</string>

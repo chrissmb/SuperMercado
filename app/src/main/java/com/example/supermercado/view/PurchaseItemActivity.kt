@@ -3,12 +3,14 @@ package com.example.supermercado.view
 import android.os.Bundle
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.supermercado.R
-import com.example.supermercado.service.ServiceLocator
+import com.example.supermercado.model.Category
 import com.example.supermercado.model.Product
+import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.model.Purchase
 import com.example.supermercado.model.PurchaseUnit
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,11 +36,13 @@ class PurchaseItemActivity : AppCompatActivity() {
         val etProductName = findViewById<EditText>(R.id.et_product_name)
         val etQuantity = findViewById<EditText>(R.id.et_quantity)
         val etUnit = findViewById<EditText>(R.id.et_unit)
+        val etCategory = findViewById<EditText>(R.id.et_category)
 
         if (purchase != null) {
-            etProductName.setText(purchase!!.product.name)
-            etQuantity.setText(purchase!!.quantity.toString())
-            etUnit.setText(purchase!!.unit?.name)
+            etProductName.setText(purchase?.product?.name)
+            etQuantity.setText(purchase?.quantity.toString())
+            etUnit.setText(purchase?.unit?.name)
+            etCategory.setText(purchase?.product?.category?.name)
         }
 
         val btnSave = findViewById<FloatingActionButton>(R.id.btn_save_purchase)
@@ -46,17 +50,44 @@ class PurchaseItemActivity : AppCompatActivity() {
             val productName = etProductName.text.toString()
             val quantity = etQuantity.text.toString().toDoubleOrNull()
             val unit = etUnit.text.toString()
+            var category = etCategory.text.toString()
 
             if (purchase == null) {
-                purchase = Purchase(null, Product(1, productName), quantity ?: 0.0, PurchaseUnit(1, unit), false)
+                purchase = Purchase(
+                    null,
+                    Product(
+                        null,
+                        productName,
+                        Category(null, category)
+                    ),
+                    quantity,
+                    PurchaseUnit(1, unit),
+                    false
+                )
                 purchaseService.insert(purchase!!)
             } else {
-                purchase!!.product = Product(1, productName)
-                purchase!!.quantity = quantity ?: 0.0
-                purchase!!.unit = PurchaseUnit(1, unit)
+                purchase?.product = Product(null, productName, Category(null, category))
+                purchase?.quantity = quantity ?: 0.0
+                purchase?.unit = PurchaseUnit(null, unit)
                 purchaseService.update(purchase!!)
             }
             finish()
+        }
+
+        val btnDelete = findViewById<FloatingActionButton>(R.id.btn_delete_purchase)
+        btnDelete.setOnClickListener {
+            if (purchase == null) {
+                throw IllegalStateException("Não é possível excluir um item que não existe.");
+            }
+            val dialog = AlertDialog.Builder(this)
+            dialog.setTitle("Confirmação")
+            dialog.setMessage("Tem certeza de que deseja excluir este item?")
+            dialog.setPositiveButton("Sim") { _, _ ->
+                purchaseService.delete(purchase!!)
+                finish()
+            }
+            dialog.setNegativeButton("Não", null)
+            dialog.show()
         }
     }
 }

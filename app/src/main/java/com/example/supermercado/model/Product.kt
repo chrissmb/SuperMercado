@@ -3,6 +3,7 @@ package com.example.supermercado.model
 import java.io.Serializable
 
 data class Product(
-    val id: Int,
-    val name: String,
+    var id: Int?,
+    var name: String,
+    var category: Category?
 ): Serializable

@@ -2,7 +2,7 @@ package com.example.supermercado.model
 
 import java.io.Serializable
 
-data class PurchaseUnit(
+data class Category(
     var id: Int?,
-    var name: String,
+    var name: String
 ): Serializable

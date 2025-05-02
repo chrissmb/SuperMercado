@@ -38,7 +38,10 @@ class PurchasePendingFragment : Fragment() {
 
         adapterProduct = AdapterPurchase()
         recyclerViewProducts.adapter = adapterProduct
-        adapterProduct.setProducts(purchaseService.getAll())
+        adapterProduct.setOnLoadListListener {
+            purchaseService.getAll()
+        }
+        adapterProduct.refresh()
 
         adapterProduct.setOnEditPurchaseListener {
             val intent = Intent(requireContext(), PurchaseItemActivity::class.java)
@@ -46,8 +49,8 @@ class PurchasePendingFragment : Fragment() {
             startActivity(intent)
         }
 
-        adapterProduct.setOnDeletePurchaseListener {
-            purchaseService.delete(it)
+        adapterProduct.setOnCheckedChangeListener {
+            purchaseService.update(it)
         }
 
         val btnAddPurchase = view.findViewById<FloatingActionButton>(R.id.btn_add_purchase)
@@ -59,6 +62,6 @@ class PurchasePendingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        adapterProduct.setProducts(purchaseService.getAll())
+        adapterProduct.refresh()
     }
 }
