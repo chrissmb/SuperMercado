@@ -1,9 +1,12 @@
 package com.example.supermercado.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,14 +17,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>() {
+class AdapterPurchase(private val context: Context) : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>() {
 
-    private var purchaseList = emptyList<Purchase>()
+    private var purchaseList: MutableList<Purchase> = mutableListOf()
 
     private var onEditPurchaseListener: ((Purchase) -> Unit) = {}
-    private var onCheckedChangeListener: ((Purchase) -> Unit) = {}
+    private var onButtonCartClickedListener: suspend ((Purchase) -> Unit) = {}
     private var onLoadList: suspend (() -> List<Purchase>) = { emptyList() }
-//    private var onLoadItem: (() -> Purchase) = {}
 
     inner class PurchaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productName: TextView = itemView.findViewById(R.id.tv_product_name)
@@ -29,8 +31,8 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
         val unit: TextView = itemView.findViewById(R.id.tv_unit)
         var category : TextView = itemView.findViewById(R.id.tv_category)
 
-        val cart: CheckBox = itemView.findViewById(R.id.cb_cart)
-        val btnEdit: TextView = itemView.findViewById(R.id.btn_edit_purchase)
+        val btnCart: Button = itemView.findViewById(R.id.btn_cart)
+        val btnEdit: Button = itemView.findViewById(R.id.btn_edit_purchase)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PurchaseViewHolder {
@@ -45,29 +47,40 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
         holder.unit.text = currentItem.unit?.name
         holder.category.text = currentItem.product.category?.name
 
-        holder.cart.setOnCheckedChangeListener(null)
-        holder.cart.isChecked = currentItem.cart
-        holder.cart.setOnCheckedChangeListener { _, isChecked ->
-            currentItem.cart = isChecked
-            onCheckedChangeListener.invoke(currentItem)
-            notifyItemChanged(position)
+        if (currentItem.cart) {
+            holder.btnCart.text = context.getString(R.string.purchase_cart_delete)
+            holder.btnCart.setBackgroundColor(Color.RED)
+//            holder.btnCart.setBackgroundResource(R.drawable.button_background_red)
+        } else {
+            holder.btnCart.text = context.getString(R.string.purchase_cart_add)
+            holder.btnCart.setBackgroundColor(Color.GREEN)
+//            holder.btnCart.setBackgroundResource(R.drawable.button_background_green)
+        }
+
+        holder.btnCart.setOnClickListener {
+            currentItem.cart = !currentItem.cart
+            CoroutineScope(Dispatchers.Main).launch {
+                onButtonCartClickedListener.invoke(currentItem)
+                purchaseList.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, purchaseList.size)
+            }
         }
 
         holder.btnEdit.setOnClickListener {
             onEditPurchaseListener.invoke(currentItem)
-            notifyItemChanged(position)
+            refresh()
         }
     }
 
     override fun getItemCount(): Int = purchaseList.size
 
-
     @SuppressLint("NotifyDataSetChanged")
     fun refresh() {
-        purchaseList = listOf(loadingDummyPurchase())
+        purchaseList = mutableListOf(loadingDummyPurchase())
         notifyDataSetChanged()
         CoroutineScope(Dispatchers.Main).launch {
-            purchaseList = onLoadList.invoke()
+            purchaseList = onLoadList.invoke().toMutableList()
             notifyDataSetChanged()
         }
     }
@@ -76,8 +89,8 @@ class AdapterPurchase : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>
         onEditPurchaseListener = listener
     }
 
-    fun setOnCheckedChangeListener(listener: (Purchase) -> Unit) {
-        onCheckedChangeListener = listener
+    fun setOnButtonCartClickedListener(listener: suspend (Purchase) -> Unit) {
+        onButtonCartClickedListener = listener
     }
 
     fun setOnLoadListListener(listener: suspend () -> List<Purchase>) {

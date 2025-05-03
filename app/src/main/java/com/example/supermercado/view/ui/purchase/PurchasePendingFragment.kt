@@ -41,11 +41,11 @@ class PurchasePendingFragment : Fragment() {
         recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewProducts.setHasFixedSize(true)
 
-        adapterProduct = AdapterPurchase()
+        adapterProduct = AdapterPurchase(requireContext())
         recyclerViewProducts.adapter = adapterProduct
         adapterProduct.setOnLoadListListener {
             try {
-                purchaseService.getAll()
+                purchaseService.getPurchasePending()
             } catch (e: Exception) {
                 Log.e("AdapterPurchase", "Error loading purchase list", e)
                 val errorMessage = getString(R.string.purchase_get_error)
@@ -61,7 +61,7 @@ class PurchasePendingFragment : Fragment() {
             startActivity(intent)
         }
 
-        adapterProduct.setOnCheckedChangeListener {
+        adapterProduct.setOnButtonCartClickedListener {
             purchaseService.update(it)
         }
 

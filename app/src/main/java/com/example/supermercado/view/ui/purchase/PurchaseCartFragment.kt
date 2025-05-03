@@ -33,10 +33,10 @@ class PurchaseCartFragment : Fragment() {
         recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewProducts.setHasFixedSize(true)
 
-        adapterProduct = AdapterPurchase()
+        adapterProduct = AdapterPurchase(requireContext())
         recyclerViewProducts.adapter = adapterProduct
         adapterProduct.setOnLoadListListener {
-            purchaseService.getAll()
+            purchaseService.getPurchaseCart()
         }
         adapterProduct.refresh()
 
@@ -46,9 +46,8 @@ class PurchaseCartFragment : Fragment() {
             startActivity(intent)
         }
 
-        adapterProduct.setOnCheckedChangeListener {
+        adapterProduct.setOnButtonCartClickedListener {
             purchaseService.update(it)
-//            adapterProduct.setProducts(purchaseService.getAll())
         }
     }
 

@@ -23,6 +23,17 @@ object AppScriptPurchaseMapper {
         )
     }
 
+    fun map(purchase: Purchase): AppScriptPurchaseDto {
+        return AppScriptPurchaseDto(
+            purchase.uuid?.toString(),
+            purchase.product.name,
+            purchase.quantity,
+            purchase.unit?.name,
+            purchase.product.category?.name,
+            purchase.cart
+        )
+    }
+
     fun map(appScriptPurchaseDtoList: List<AppScriptPurchaseDto>): List<Purchase> {
         return appScriptPurchaseDtoList.map { map(it) }
     }

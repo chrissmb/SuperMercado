@@ -15,6 +15,9 @@ import com.example.supermercado.model.Purchase
 import com.example.supermercado.model.PurchaseUnit
 import com.example.supermercado.util.MessageUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PurchaseItemActivity : AppCompatActivity() {
 
@@ -65,25 +68,31 @@ class PurchaseItemActivity : AppCompatActivity() {
                     PurchaseUnit(1, unit),
                     false
                 )
-                purchaseService.insert(purchase!!)
+                CoroutineScope(Dispatchers.Main).launch {
+                    purchaseService.insert(purchase!!)
+                }
             } else {
                 purchase?.product = Product(null, productName, Category(null, category))
                 purchase?.quantity = quantity ?: 0.0
                 purchase?.unit = PurchaseUnit(null, unit)
-                purchaseService.update(purchase!!)
+                CoroutineScope(Dispatchers.Main).launch {
+                    purchaseService.update(purchase!!)
+                }
             }
             finish()
         }
 
         val btnDelete = findViewById<FloatingActionButton>(R.id.btn_delete_purchase)
         btnDelete.setOnClickListener {
-            if (purchase == null) {
+            if (purchase?.uuid == null) {
                 throw IllegalStateException("Não é possível excluir um item que não existe.");
             }
             val message = getString(R.string.message_confirm_purchase_delete)
             MessageUtil.showConfirmMessage(message, this) {
-                purchaseService.delete(purchase!!)
-                finish()
+                CoroutineScope(Dispatchers.Main).launch {
+                    purchaseService.delete(purchase!!.uuid!!)
+                    finish()
+                }
             }
         }
     }

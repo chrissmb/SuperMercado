@@ -9,56 +9,23 @@ import java.util.UUID
 
 class PurchaseService(private val purchaseApi: PurchaseApi) {
 
-    val purchases = mutableListOf(
-        Purchase(
-        uuid = UUID.randomUUID(),
-        product = Product(1, "Chocolate", Category(null, "Doce")),
-        quantity = 2.0,
-        unit = PurchaseUnit(1, "Unidade"),
-        cart = false
-        ),
-        Purchase(
-            uuid = UUID.randomUUID(),
-            product = Product(1, "Queijo", Category(null, "Comida")),
-            quantity = 0.2,
-            unit = PurchaseUnit(2, "KG"),
-            cart = true
-        ),
-        Purchase(
-            uuid = UUID.randomUUID(),
-            product = Product(1, "Refrigerante 2L", Category(null, "Bebida")),
-            quantity = 3.0,
-            unit = PurchaseUnit(1, "Unidade"),
-            cart = false
-        ),
-        Purchase(
-            uuid = UUID.randomUUID(),
-            product = Product(1, "Refrigerante lata", Category(null, "Bebida")),
-            quantity = 5.0,
-            unit = null,
-            cart = false
-        ),
-    )
-
-
-
-    suspend fun getAll(): List<Purchase> {
+    suspend fun getPurchasePending(): List<Purchase> {
         return purchaseApi.getPurchasePending()
     }
 
-    fun insert(purchase: Purchase) {
-        purchase.uuid = UUID.randomUUID()
-        purchases.add(purchase)
+    suspend fun getPurchaseCart(): List<Purchase> {
+        return purchaseApi.getPurchaseCart()
     }
 
-    fun delete(purchase: Purchase) {
-        purchases.remove(purchase)
+    suspend fun insert(purchase: Purchase): Purchase {
+        return purchaseApi.insert(purchase)
     }
 
-    fun update(purchase: Purchase) {
-        val index = purchases.indexOfFirst { it.uuid == purchase.uuid }
-        if (index != -1) {
-            purchases[index] = purchase
-        }
+    suspend fun update(purchase: Purchase): Purchase {
+        return purchaseApi.update(purchase)
+    }
+
+    suspend fun delete(uuid: UUID) {
+        purchaseApi.delete(uuid)
     }
 }
