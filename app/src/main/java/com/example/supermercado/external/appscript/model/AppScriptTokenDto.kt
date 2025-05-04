@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AppScriptTokenDto(
     val token: String,
-    val expires_in: Int,
+    val expires_in: Long,
 )

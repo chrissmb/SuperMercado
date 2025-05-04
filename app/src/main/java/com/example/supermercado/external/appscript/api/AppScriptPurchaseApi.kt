@@ -5,7 +5,6 @@ import com.example.supermercado.external.PurchaseApi
 import com.example.supermercado.external.appscript.mapper.AppScriptPurchaseMapper
 import com.example.supermercado.external.appscript.model.AppScriptPurchaseDto
 import com.example.supermercado.model.Purchase
-import com.google.gson.reflect.TypeToken
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -14,7 +13,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import java.lang.reflect.Type
 import java.util.UUID
 
 
@@ -75,6 +73,17 @@ class AppScriptPurchaseApi(private val httpClient: HttpClient) : AppScriptAbstra
             parameter("query", "purchase_delete")
             parameter("token", getToken())
             parameter("uuid", uuid.toString())
+        }
+        val body: Map<String, Boolean> = treatResponse(response, httpClient).body()
+        if (!body.containsKey("success") || body["success"] != true) {
+            throw RuntimeException("Error deleting purchase")
+        }
+    }
+
+    override suspend fun completePurchase() {
+        val response = httpClient.get(getBaseUrl()) {
+            parameter("query", "purchase_complete")
+            parameter("token", getToken())
         }
         val body: Map<String, Boolean> = treatResponse(response, httpClient).body()
         if (!body.containsKey("success") || body["success"] != true) {

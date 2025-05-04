@@ -35,4 +35,8 @@ class PurchaseService(private val purchaseApi: PurchaseApi) {
     suspend fun delete(uuid: UUID) {
         purchaseApi.delete(uuid)
     }
+
+    suspend fun completePurchase() {
+        purchaseApi.completePurchase()
+    }
 }

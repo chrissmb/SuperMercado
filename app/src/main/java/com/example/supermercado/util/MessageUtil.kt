@@ -6,13 +6,18 @@ import com.example.supermercado.R
 
 object MessageUtil {
 
-    fun showMessage(message: String, context: Context) {
+    fun showMessage(message: String, context: Context, onConfirm: () -> Unit) {
         val dialog = AlertDialog.Builder(context)
         val title = context.getString(R.string.title_message_information)
         dialog.setTitle(title)
         dialog.setMessage(message)
-        dialog.setPositiveButton("Ok") { _, _ -> }
+        dialog.setPositiveButton("Ok") { _, _ -> onConfirm.invoke()}
+        dialog.setCancelable(false)
         dialog.show()
+    }
+
+    fun showMessage(message: String, context: Context) {
+        showMessage(message, context) {}
     }
 
     fun showErrorMessage(message: String, context: Context) {

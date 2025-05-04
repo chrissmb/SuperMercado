@@ -10,6 +10,7 @@
     <string name="purchase_category">Categoria</string>
     <string name="purchase_unit">Unidade</string>
     <string name="purchase_add">Adicionar</string>
+    <string name="purchase_complete">Completar</string>
     <string name="purchase">Compra</string>
     <string name="purchase_save">Salvar</string>
     <string name="purchase_delete">Excluir</string>
@@ -29,4 +30,5 @@
     <string name="purchase_cart_add">Adicionar ao carrinho</string>
     <string name="purchase_cart_delete">Remover do carrinho</string>
     <string name="unknwon_error">Erro desconhecido</string>
+    <string name="expired_session">Sessão expirada</string>
 </resources>

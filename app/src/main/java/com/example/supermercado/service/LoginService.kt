@@ -29,7 +29,7 @@ class LoginService(
         val expiresIn = localDataService.getExpiresIn(context).first()
         TokenCacheUtil.token = token
         TokenCacheUtil.expiresIn = expiresIn
-        val currentTime = System.currentTimeMillis() / 1000
+        val currentTime = System.currentTimeMillis() / 1000L
         return currentTime >= expiresIn
     }
 

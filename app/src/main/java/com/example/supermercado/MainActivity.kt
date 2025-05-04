@@ -60,10 +60,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         CoroutineScope(Dispatchers.Main).launch {
-            val isExpired = loginService.isTokenExpired(this@MainActivity)
-            if (!isExpired) {
-                val intent = Intent(this@MainActivity, PrincipalActivity::class.java)
-                startActivity(intent)
+            try {
+                val isExpired = loginService.isTokenExpired(this@MainActivity)
+                if (!isExpired) {
+                    val intent = Intent(this@MainActivity, PrincipalActivity::class.java)
+                    startActivity(intent)
+                }
+            } catch (e: Exception) {
+                Log.e("TokenError", "Token check failed", e)
             }
             btnEnter.isEnabled = true
         }

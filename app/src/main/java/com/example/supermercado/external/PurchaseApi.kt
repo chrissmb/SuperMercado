@@ -10,4 +10,5 @@ interface PurchaseApi {
     suspend fun insert(purchase: Purchase): Purchase
     suspend fun update(purchase: Purchase): Purchase
     suspend fun delete(uuid: UUID)
+    suspend fun completePurchase()
 }

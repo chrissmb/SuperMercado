@@ -11,8 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
 import com.example.supermercado.adapter.AdapterPurchase
 import com.example.supermercado.service.ServiceLocator
+import com.example.supermercado.service.exception.BusinessException
+import com.example.supermercado.util.MessageUtil
+import com.example.supermercado.util.ServiceCallUtil
 import com.example.supermercado.view.PurchaseItemActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PurchaseCartFragment : Fragment() {
 
@@ -49,10 +55,19 @@ class PurchaseCartFragment : Fragment() {
         adapterProduct.setOnButtonCartClickedListener {
             purchaseService.update(it)
         }
+
+        val btnCompletePurchase = view.findViewById<FloatingActionButton>(R.id.btn_complete_purchase)
+        btnCompletePurchase.setOnClickListener {
+            ServiceCallUtil.treatServiceCall(requireContext()) {
+                purchaseService.completePurchase()
+                adapterProduct.refresh()
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         adapterProduct.refresh()
     }
+
 }

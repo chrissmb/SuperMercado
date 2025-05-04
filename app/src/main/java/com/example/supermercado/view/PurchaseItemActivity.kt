@@ -1,26 +1,29 @@
 package com.example.supermercado.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.supermercado.R
 import com.example.supermercado.model.Category
 import com.example.supermercado.model.Product
-import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.model.Purchase
 import com.example.supermercado.model.PurchaseUnit
+import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.service.exception.BusinessException
 import com.example.supermercado.util.MessageUtil
+import com.example.supermercado.util.ServiceCallUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class PurchaseItemActivity : AppCompatActivity() {
 
@@ -47,6 +50,11 @@ class PurchaseItemActivity : AppCompatActivity() {
 
         purchase = intent.getSerializableExtra("purchase") as? Purchase
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         etProductName = findViewById<EditText>(R.id.et_product_name)
         etQuantity = findViewById<EditText>(R.id.et_quantity)
         autoCompleteUnit = findViewById<AutoCompleteTextView>(R.id.autoComplete_unit)
@@ -70,6 +78,11 @@ class PurchaseItemActivity : AppCompatActivity() {
 
         defineCategoryAutoCompleteComponent()
         defineUnitAutoCompleteComponent()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 
     private fun defineCategoryAutoCompleteComponent() {
@@ -109,7 +122,12 @@ class PurchaseItemActivity : AppCompatActivity() {
         MessageUtil.showConfirmMessage(message, this) {
             CoroutineScope(Dispatchers.Main).launch {
                 purchaseService.delete(purchase!!.uuid!!)
-                finish()
+                runOnUiThread {
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("updated", true)
+                    setResult(RESULT_OK, resultIntent)
+                    finish()
+                }
             }
         }
     }
@@ -122,7 +140,7 @@ class PurchaseItemActivity : AppCompatActivity() {
 
         if (purchase == null) {
             purchase = mapPurchase(productName, category, quantity, unit)
-            treatServiceCall {
+            ServiceCallUtil.treatServiceCall(this) {
                 purchaseService.insert(purchase!!)
                 finish()
             }
@@ -130,7 +148,7 @@ class PurchaseItemActivity : AppCompatActivity() {
             purchase?.product = Product(null, productName, Category(null, category))
             purchase?.quantity = quantity ?: 0.0
             purchase?.unit = PurchaseUnit(null, unit)
-            treatServiceCall {
+            ServiceCallUtil.treatServiceCall(this) {
                 purchaseService.update(purchase!!)
                 finish()
             }
@@ -153,18 +171,4 @@ class PurchaseItemActivity : AppCompatActivity() {
         unit = PurchaseUnit(1, unit),
         cart = false
     )
-
-    private fun treatServiceCall(callback: suspend () -> Unit) {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                callback.invoke()
-            } catch (e: BusinessException) {
-                val unknownErrorMessage = getString(R.string.unknwon_error)
-                MessageUtil.showErrorMessage(e.message ?: unknownErrorMessage, this@PurchaseItemActivity)
-            } catch (e: Exception) {
-                val unknownErrorMessage = getString(R.string.unknwon_error)
-                MessageUtil.showErrorMessage(unknownErrorMessage, this@PurchaseItemActivity)
-            }
-        }
-    }
 }

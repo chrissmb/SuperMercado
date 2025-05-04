@@ -3,12 +3,10 @@ package com.example.supermercado.view.ui.purchase
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
@@ -17,9 +15,6 @@ import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.view.PurchaseItemActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class PurchasePendingFragment : Fragment() {
@@ -70,6 +65,8 @@ class PurchasePendingFragment : Fragment() {
             val intent = Intent(requireContext(), PurchaseItemActivity::class.java)
             startActivity(intent)
         }
+
+        adapterProduct.refresh()
     }
 
     override fun onResume() {

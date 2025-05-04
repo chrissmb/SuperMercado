@@ -20,6 +20,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:layout_editor_absoluteX="-3dp" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_complete_purchase"
+            android:layout_width="396dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="?attr/colorPrimary"
+            android:contentDescription="@string/purchase_complete"
+            android:src="@android:drawable/ic_menu_send"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
