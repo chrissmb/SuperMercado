@@ -53,7 +53,7 @@ class AdapterPurchase(private val context: Context) : RecyclerView.Adapter<Adapt
 //            holder.btnCart.setBackgroundResource(R.drawable.button_background_red)
         } else {
             holder.btnCart.text = context.getString(R.string.purchase_cart_add)
-            holder.btnCart.setBackgroundColor(Color.GREEN)
+            holder.btnCart.setBackgroundColor(Color.rgb(0, 100,0))
 //            holder.btnCart.setBackgroundResource(R.drawable.button_background_green)
         }
 

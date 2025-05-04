@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.ktor.serialization.gson)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.datastore.preferences)
-    implementation(libs.ktor.client.logging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

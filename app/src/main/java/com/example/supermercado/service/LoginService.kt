@@ -15,22 +15,22 @@ class LoginService(
 
     suspend fun login(username: String, password: String, context: Context) {
         val token = loginApi.login(username, password)
-        Log.i("LoginService", "Token: ${token.value}, Expires In: ${token.expiresIn}")
+        Log.i("LoginService", "Token: ${token.value}, ExpiresIn: ${token.expiresIn}")
 
         TokenCacheUtil.token = token.value
         TokenCacheUtil.expiresIn = token.expiresIn
 
-        val tokenJson = Gson().toJson(token)
-        localDataService.saveToken(context, tokenJson)
+        localDataService.saveToken(context, token.value)
+        localDataService.saveExpiresIn(context, token.expiresIn)
     }
 
     suspend fun isTokenExpired(context: Context): Boolean {
-        val tokenJson = localDataService.getToken(context).first()
-        val token = Gson().fromJson(tokenJson, Token::class.java)
-        TokenCacheUtil.token = token?.value
-        TokenCacheUtil.expiresIn = token?.expiresIn
+        val token = localDataService.getToken(context).first()
+        val expiresIn = localDataService.getExpiresIn(context).first()
+        TokenCacheUtil.token = token
+        TokenCacheUtil.expiresIn = expiresIn
         val currentTime = System.currentTimeMillis() / 1000
-        return token?.expiresIn == null || currentTime >= token.expiresIn
+        return currentTime >= expiresIn
     }
 
     suspend fun refreshTokenCache(context: Context) {

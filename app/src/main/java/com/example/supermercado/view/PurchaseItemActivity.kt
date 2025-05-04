@@ -70,6 +70,7 @@ class PurchaseItemActivity : AppCompatActivity() {
                 )
                 CoroutineScope(Dispatchers.Main).launch {
                     purchaseService.insert(purchase!!)
+                    finish()
                 }
             } else {
                 purchase?.product = Product(null, productName, Category(null, category))
@@ -77,9 +78,9 @@ class PurchaseItemActivity : AppCompatActivity() {
                 purchase?.unit = PurchaseUnit(null, unit)
                 CoroutineScope(Dispatchers.Main).launch {
                     purchaseService.update(purchase!!)
+                    finish()
                 }
             }
-            finish()
         }
 
         val btnDelete = findViewById<FloatingActionButton>(R.id.btn_delete_purchase)

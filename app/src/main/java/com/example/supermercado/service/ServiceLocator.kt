@@ -24,12 +24,6 @@ object ServiceLocator {
             install(ContentNegotiation) {
                 gson()
             }
-            install(io.ktor.client.plugins.logging.Logging) {
-                level = io.ktor.client.plugins.logging.LogLevel.ALL
-            }
-            install(HttpRedirect) {
-
-            }
         }
     }
 }

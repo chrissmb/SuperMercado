@@ -31,7 +31,7 @@ abstract class AppScriptAbstractApi {
             responseRedirect = httpClient.get(response.headers["Location"]!!)
         }
         val bodyString = responseRedirect.body<String>()
-        Log.i("AppScriptAbstractApi", "Status: ${response.status.value} Response: $bodyString")
+        Log.i("AppScriptAbstractApi", "Status: ${responseRedirect.status.value} Response: $bodyString")
         if (responseRedirect.status.value != 200 || bodyString.contains("errorMessage")) {
             throw RuntimeException("Response error")
         }
