@@ -28,4 +28,5 @@
     <string name="purchase_get_error">Erro ao carregar lista</string>
     <string name="purchase_cart_add">Adicionar ao carrinho</string>
     <string name="purchase_cart_delete">Remover do carrinho</string>
+    <string name="unknwon_error">Erro desconhecido</string>
 </resources>

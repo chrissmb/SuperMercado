@@ -11,26 +11,26 @@ object AppScriptPurchaseMapper {
 
     fun map(appScriptPurchaseDto: AppScriptPurchaseDto): Purchase {
         return Purchase(
-            UUID.fromString(appScriptPurchaseDto.uuid),
-            Product(
+            uuid = UUID.fromString(appScriptPurchaseDto.uuid),
+            product = Product(
                 null,
                 appScriptPurchaseDto.product,
                 if (appScriptPurchaseDto.category.isNullOrBlank()) null else Category(null, appScriptPurchaseDto.category),
             ),
-            appScriptPurchaseDto.quantity,
-            if (appScriptPurchaseDto.unit.isNullOrBlank()) null else PurchaseUnit(null, appScriptPurchaseDto.unit),
-            appScriptPurchaseDto.cart
+            quantity = appScriptPurchaseDto.quantity,
+            unit = if (appScriptPurchaseDto.unit.isNullOrBlank()) null else PurchaseUnit(null, appScriptPurchaseDto.unit),
+            cart = appScriptPurchaseDto.cart
         )
     }
 
     fun map(purchase: Purchase): AppScriptPurchaseDto {
         return AppScriptPurchaseDto(
-            purchase.uuid?.toString(),
-            purchase.product.name,
-            purchase.quantity,
-            purchase.unit?.name,
-            purchase.product.category?.name,
-            purchase.cart
+            uuid = purchase.uuid?.toString(),
+            product = purchase.product.name,
+            quantity = purchase.quantity,
+            unit = purchase.unit?.name,
+            category = purchase.product.category?.name,
+            cart = purchase.cart
         )
     }
 

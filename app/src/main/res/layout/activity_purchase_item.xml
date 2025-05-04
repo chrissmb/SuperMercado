@@ -19,18 +19,30 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="1dp" />
 
-    <EditText
-        android:id="@+id/et_category"
+<!--    <EditText-->
+<!--        android:id="@+id/et_category"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="15"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:hint="@string/purchase_category"-->
+<!--        android:inputType="text"-->
+<!--        android:autofillHints="category"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/toolbar"/>-->
+
+    <AutoCompleteTextView
+        android:id="@+id/autoComplete_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="15"
+        android:text=""
         android:layout_margin="20dp"
+        android:ems="15"
         android:hint="@string/purchase_category"
-        android:inputType="text"
-        android:autofillHints="category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <EditText
         android:id="@+id/et_product_name"
@@ -43,7 +55,7 @@
         android:autofillHints="name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_category" />
+        app:layout_constraintTop_toBottomOf="@id/autoComplete_category" />
 
     <EditText
         android:id="@+id/et_quantity"
@@ -58,8 +70,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_product_name" />
 
-    <EditText
-        android:id="@+id/et_unit"
+    <AutoCompleteTextView
+        android:id="@+id/autoComplete_unit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="15"
