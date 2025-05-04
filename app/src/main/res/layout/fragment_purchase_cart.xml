@@ -24,7 +24,7 @@
             android:id="@+id/btn_complete_purchase"
             android:layout_width="396dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             android:background="?attr/colorPrimary"
             android:contentDescription="@string/purchase_complete"
             android:src="@android:drawable/ic_menu_send"
