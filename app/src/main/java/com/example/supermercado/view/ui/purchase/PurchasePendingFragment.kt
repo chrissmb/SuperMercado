@@ -36,7 +36,7 @@ class PurchasePendingFragment : Fragment() {
         recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewProducts.setHasFixedSize(true)
 
-        adapterProduct = AdapterPurchase(requireContext())
+        adapterProduct = AdapterPurchase(requireContext(), parentFragmentManager)
         recyclerViewProducts.adapter = adapterProduct
         adapterProduct.setOnLoadListListener {
             try {

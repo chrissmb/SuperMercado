@@ -2,23 +2,18 @@ package com.example.supermercado.view.ui.purchase
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
 import com.example.supermercado.adapter.AdapterPurchase
 import com.example.supermercado.service.ServiceLocator
-import com.example.supermercado.service.exception.BusinessException
-import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.util.ServiceCallUtil
 import com.example.supermercado.view.PurchaseItemActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class PurchaseCartFragment : Fragment() {
 
@@ -39,7 +34,7 @@ class PurchaseCartFragment : Fragment() {
         recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewProducts.setHasFixedSize(true)
 
-        adapterProduct = AdapterPurchase(requireContext())
+        adapterProduct = AdapterPurchase(requireContext(), parentFragmentManager)
         recyclerViewProducts.adapter = adapterProduct
         adapterProduct.setOnLoadListListener {
             purchaseService.getPurchaseCart()
@@ -58,7 +53,7 @@ class PurchaseCartFragment : Fragment() {
 
         val btnCompletePurchase = view.findViewById<FloatingActionButton>(R.id.btn_complete_purchase)
         btnCompletePurchase.setOnClickListener {
-            ServiceCallUtil.treatServiceCall(requireContext()) {
+            ServiceCallUtil.treatServiceCall(requireContext(), parentFragmentManager) {
                 purchaseService.completePurchase()
                 adapterProduct.refresh()
             }

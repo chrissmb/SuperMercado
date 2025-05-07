@@ -16,7 +16,6 @@ import com.example.supermercado.model.Product
 import com.example.supermercado.model.Purchase
 import com.example.supermercado.model.PurchaseUnit
 import com.example.supermercado.service.ServiceLocator
-import com.example.supermercado.service.exception.BusinessException
 import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.util.ServiceCallUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -120,7 +119,7 @@ class PurchaseItemActivity : AppCompatActivity() {
         }
         val message = getString(R.string.message_confirm_purchase_delete)
         MessageUtil.showConfirmMessage(message, this) {
-            CoroutineScope(Dispatchers.Main).launch {
+            ServiceCallUtil.treatServiceCall(this@PurchaseItemActivity, supportFragmentManager) {
                 purchaseService.delete(purchase!!.uuid!!)
                 runOnUiThread {
                     val resultIntent = Intent()
@@ -140,7 +139,7 @@ class PurchaseItemActivity : AppCompatActivity() {
 
         if (purchase == null) {
             purchase = mapPurchase(productName, category, quantity, unit)
-            ServiceCallUtil.treatServiceCall(this) {
+            ServiceCallUtil.treatServiceCall(this, supportFragmentManager) {
                 purchaseService.insert(purchase!!)
                 finish()
             }
@@ -148,7 +147,7 @@ class PurchaseItemActivity : AppCompatActivity() {
             purchase?.product = Product(null, productName, Category(null, category))
             purchase?.quantity = quantity ?: 0.0
             purchase?.unit = PurchaseUnit(null, unit)
-            ServiceCallUtil.treatServiceCall(this) {
+            ServiceCallUtil.treatServiceCall(this, supportFragmentManager) {
                 purchaseService.update(purchase!!)
                 finish()
             }

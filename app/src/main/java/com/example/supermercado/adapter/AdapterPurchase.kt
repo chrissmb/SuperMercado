@@ -7,17 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
-import com.example.supermercado.model.Product
 import com.example.supermercado.model.Purchase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.supermercado.util.ServiceCallUtil
 
-class AdapterPurchase(private val context: Context) : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>() {
+class AdapterPurchase(
+    private val context: Context,
+    private val manager: FragmentManager,
+) : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>() {
 
     private var purchaseList: MutableList<Purchase> = mutableListOf()
 
@@ -57,7 +57,7 @@ class AdapterPurchase(private val context: Context) : RecyclerView.Adapter<Adapt
 
         holder.btnCart.setOnClickListener {
             currentItem.cart = !currentItem.cart
-            CoroutineScope(Dispatchers.Main).launch {
+            ServiceCallUtil.treatServiceCall(context, manager) {
                 onButtonCartClickedListener.invoke(currentItem)
                 purchaseList.removeAt(position)
                 notifyItemRemoved(position)
@@ -67,7 +67,6 @@ class AdapterPurchase(private val context: Context) : RecyclerView.Adapter<Adapt
 
         holder.btnEdit.setOnClickListener {
             onEditPurchaseListener.invoke(currentItem)
-            refresh()
         }
     }
 
@@ -75,10 +74,8 @@ class AdapterPurchase(private val context: Context) : RecyclerView.Adapter<Adapt
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh() {
-        purchaseList = mutableListOf(loadingDummyPurchase())
-        notifyDataSetChanged()
-        CoroutineScope(Dispatchers.Main).launch {
-            purchaseList = onLoadList.invoke().toMutableList()
+        ServiceCallUtil.treatServiceCall(context, manager) {
+            purchaseList = onLoadList().toMutableList()
             notifyDataSetChanged()
         }
     }
@@ -93,14 +90,5 @@ class AdapterPurchase(private val context: Context) : RecyclerView.Adapter<Adapt
 
     fun setOnLoadListListener(listener: suspend () -> List<Purchase>) {
         onLoadList = listener
-    }
-
-    private fun loadingDummyPurchase(): Purchase {
-        return Purchase(
-            null,
-            Product(null, "Carregando...", null),
-            null,
-            null,
-            false)
     }
 }

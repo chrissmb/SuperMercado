@@ -14,8 +14,6 @@ import com.example.supermercado.databinding.ActivityPrincipalBinding
 import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.util.TokenCacheUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

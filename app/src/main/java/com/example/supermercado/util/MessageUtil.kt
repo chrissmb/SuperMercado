@@ -11,7 +11,7 @@ object MessageUtil {
         val title = context.getString(R.string.title_message_information)
         dialog.setTitle(title)
         dialog.setMessage(message)
-        dialog.setPositiveButton("Ok") { _, _ -> onConfirm.invoke()}
+        dialog.setPositiveButton("Ok") { _, _ -> onConfirm()}
         dialog.setCancelable(false)
         dialog.show()
     }
@@ -35,7 +35,7 @@ object MessageUtil {
         dialog.setTitle(title)
         dialog.setMessage(message)
         dialog.setPositiveButton("Sim") { _, _ ->
-            onYes.invoke()
+            onYes()
         }
         dialog.setNegativeButton("Não", null)
         dialog.show()
