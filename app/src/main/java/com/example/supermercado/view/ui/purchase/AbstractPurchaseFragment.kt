@@ -14,24 +14,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
 import com.example.supermercado.adapter.AdapterPurchase
+import com.example.supermercado.model.Purchase
 import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.view.PurchaseItemActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-
-class PurchasePendingFragment : Fragment() {
+abstract class AbstractPurchaseFragment : Fragment()  {
 
     private val purchaseService = ServiceLocator.purchaseService
     private lateinit var adapterProduct: AdapterPurchase
     private lateinit var purchaseItemLancher: ActivityResultLauncher<Intent>;
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_purchase_pending, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +37,7 @@ class PurchasePendingFragment : Fragment() {
         recyclerViewProducts.adapter = adapterProduct
         adapterProduct.setOnLoadListListener {
             try {
-                purchaseService.getPurchasePending()
+                getPurchaseList()
             } catch (e: Exception) {
                 Log.e("AdapterPurchase", "Error loading purchase list", e)
                 val errorMessage = getString(R.string.purchase_get_error)
@@ -73,10 +66,9 @@ class PurchasePendingFragment : Fragment() {
         adapterProduct.refresh()
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        adapterProduct.refresh()
-//    }
+    protected fun getAdapterProduct(): AdapterPurchase {
+        return adapterProduct
+    }
 
     private fun definePurchaseItemLancher() {
         purchaseItemLancher = registerForActivityResult(
@@ -90,4 +82,6 @@ class PurchasePendingFragment : Fragment() {
             }
         }
     }
+
+    protected abstract fun getPurchaseList(): List<Purchase>;
 }

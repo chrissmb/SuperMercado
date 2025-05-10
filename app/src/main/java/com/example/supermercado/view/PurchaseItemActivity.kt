@@ -141,7 +141,7 @@ class PurchaseItemActivity : AppCompatActivity() {
             purchase = mapPurchase(productName, category, quantity, unit)
             ServiceCallUtil.treatServiceCall(this, supportFragmentManager) {
                 purchaseService.insert(purchase!!)
-                finish()
+                goBackAndSetResult()
             }
         } else {
             purchase?.product = Product(null, productName, Category(null, category))
@@ -149,7 +149,7 @@ class PurchaseItemActivity : AppCompatActivity() {
             purchase?.unit = PurchaseUnit(null, unit)
             ServiceCallUtil.treatServiceCall(this, supportFragmentManager) {
                 purchaseService.update(purchase!!)
-                finish()
+                goBackAndSetResult()
             }
         }
     }
@@ -170,4 +170,11 @@ class PurchaseItemActivity : AppCompatActivity() {
         unit = PurchaseUnit(1, unit),
         cart = false
     )
+
+    private fun goBackAndSetResult() {
+        val resultIntent = Intent()
+        resultIntent.putExtra("updated", true)
+        setResult(RESULT_OK, resultIntent)
+        finish()
+    }
 }
