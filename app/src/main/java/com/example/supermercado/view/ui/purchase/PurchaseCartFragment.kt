@@ -10,15 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
 import com.example.supermercado.adapter.AdapterPurchase
+import com.example.supermercado.model.Purchase
 import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.util.ServiceCallUtil
 import com.example.supermercado.view.PurchaseItemActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class PurchaseCartFragment : Fragment() {
-
-    private val purchaseService = ServiceLocator.purchaseService
-    private lateinit var adapterProduct: AdapterPurchase
+class PurchaseCartFragment : AbstractPurchaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,39 +28,16 @@ class PurchaseCartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerViewProducts = view.findViewById<RecyclerView>(R.id.recyclerview_products)
-        recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
-        recyclerViewProducts.setHasFixedSize(true)
-
-        adapterProduct = AdapterPurchase(requireContext(), parentFragmentManager)
-        recyclerViewProducts.adapter = adapterProduct
-        adapterProduct.setOnLoadListListener {
-            purchaseService.getPurchaseCart()
-        }
-        adapterProduct.refresh()
-
-        adapterProduct.setOnEditPurchaseListener {
-            val intent = Intent(requireContext(), PurchaseItemActivity::class.java)
-            intent.putExtra("purchase", it)
-            startActivity(intent)
-        }
-
-        adapterProduct.setOnButtonCartClickedListener {
-            purchaseService.update(it)
-        }
-
         val btnCompletePurchase = view.findViewById<FloatingActionButton>(R.id.btn_complete_purchase)
         btnCompletePurchase.setOnClickListener {
             ServiceCallUtil.treatServiceCall(requireContext(), parentFragmentManager) {
-                purchaseService.completePurchase()
-                adapterProduct.refresh()
+                getPurchaseService().completePurchase()
+                getAdapterProduct().refresh()
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        adapterProduct.refresh()
+    override suspend fun getPurchaseList(): List<Purchase> {
+        return getPurchaseService().getPurchaseCart()
     }
-
 }

@@ -3,9 +3,7 @@ package com.example.supermercado.view.ui.purchase
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
 import com.example.supermercado.adapter.AdapterPurchase
 import com.example.supermercado.model.Purchase
+import com.example.supermercado.service.PurchaseService
 import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.view.PurchaseItemActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 abstract class AbstractPurchaseFragment : Fragment()  {
 
@@ -56,18 +54,19 @@ abstract class AbstractPurchaseFragment : Fragment()  {
             purchaseService.update(it)
         }
 
-        val btnAddPurchase = view.findViewById<FloatingActionButton>(R.id.btn_add_purchase)
-        btnAddPurchase.setOnClickListener {
-            val intent = Intent(requireContext(), PurchaseItemActivity::class.java)
-            purchaseItemLancher.launch(intent)
-        }
-
         definePurchaseItemLancher()
-        adapterProduct.refresh()
     }
 
     protected fun getAdapterProduct(): AdapterPurchase {
         return adapterProduct
+    }
+
+    protected fun getPurchaseItemLancher(): ActivityResultLauncher<Intent> {
+        return purchaseItemLancher
+    }
+
+    protected fun getPurchaseService(): PurchaseService {
+        return purchaseService
     }
 
     private fun definePurchaseItemLancher() {
@@ -83,5 +82,5 @@ abstract class AbstractPurchaseFragment : Fragment()  {
         }
     }
 
-    protected abstract fun getPurchaseList(): List<Purchase>;
+    protected abstract suspend fun getPurchaseList(): List<Purchase>;
 }
