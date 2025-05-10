@@ -35,6 +35,8 @@ class PurchaseCartFragment : AbstractPurchaseFragment() {
                 getAdapterProduct().refresh()
             }
         }
+
+        getAdapterProduct().refresh()
     }
 
     override suspend fun getPurchaseList(): List<Purchase> {
