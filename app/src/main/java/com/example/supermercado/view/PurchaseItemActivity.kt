@@ -166,7 +166,7 @@ class PurchaseItemActivity : AppCompatActivity() {
             name = productName,
             category = Category(null, category)
         ),
-        quantity = quantity,
+        quantity = quantity ?: 0.0,
         unit = PurchaseUnit(1, unit),
         cart = false
     )
