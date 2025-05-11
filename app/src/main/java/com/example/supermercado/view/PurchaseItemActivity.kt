@@ -119,7 +119,7 @@ class PurchaseItemActivity : AppCompatActivity() {
         }
         val message = getString(R.string.message_confirm_purchase_delete)
         MessageUtil.showConfirmMessage(message, this) {
-            ServiceCallUtil.treatServiceCall(this@PurchaseItemActivity, supportFragmentManager) {
+            ServiceCallUtil.treatServiceCall(this@PurchaseItemActivity) {
                 purchaseService.delete(purchase!!.uuid!!)
                 runOnUiThread {
                     val resultIntent = Intent()
@@ -139,7 +139,7 @@ class PurchaseItemActivity : AppCompatActivity() {
 
         if (purchase == null) {
             purchase = mapPurchase(productName, category, quantity, unit)
-            ServiceCallUtil.treatServiceCall(this, supportFragmentManager) {
+            ServiceCallUtil.treatServiceCall(this) {
                 purchaseService.insert(purchase!!)
                 goBackAndSetResult()
             }
@@ -147,7 +147,7 @@ class PurchaseItemActivity : AppCompatActivity() {
             purchase?.product = Product(null, productName, Category(null, category))
             purchase?.quantity = quantity ?: 0.0
             purchase?.unit = PurchaseUnit(null, unit)
-            ServiceCallUtil.treatServiceCall(this, supportFragmentManager) {
+            ServiceCallUtil.treatServiceCall(this) {
                 purchaseService.update(purchase!!)
                 goBackAndSetResult()
             }

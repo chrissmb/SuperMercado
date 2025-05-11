@@ -20,7 +20,8 @@
     <string name="title_home">Home</string>
     <string name="title_purchase_pending">Pendentes</string>
     <string name="title_purchase_cart">Carrinho</string>
-    <string name="message_confirm_purchase_delete">Tem certeza de que deseja excluir este item?</string>
+    <string name="message_confirm_purchase_delete">Deseja excluir este item?</string>
+    <string name="message_confirm_purchase_complete">Deseja completar a compra?</string>
     <string name="title_message_information">Informação</string>
     <string name="title_message_error">Erro</string>
     <string name="title_message_confirmation">Confirmação</string>

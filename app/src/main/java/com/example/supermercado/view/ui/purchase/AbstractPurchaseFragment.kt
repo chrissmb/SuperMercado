@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
@@ -16,9 +17,10 @@ import com.example.supermercado.model.Purchase
 import com.example.supermercado.service.PurchaseService
 import com.example.supermercado.service.ServiceLocator
 import com.example.supermercado.util.MessageUtil
+import com.example.supermercado.util.SharedViewModel
 import com.example.supermercado.view.PurchaseItemActivity
 
-abstract class AbstractPurchaseFragment : Fragment()  {
+abstract class AbstractPurchaseFragment : Fragment() {
 
     private val purchaseService = ServiceLocator.purchaseService
     private lateinit var adapterProduct: AdapterPurchase
@@ -31,7 +33,7 @@ abstract class AbstractPurchaseFragment : Fragment()  {
         recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewProducts.setHasFixedSize(true)
 
-        adapterProduct = AdapterPurchase(requireContext(), parentFragmentManager)
+        adapterProduct = AdapterPurchase(this)
         recyclerViewProducts.adapter = adapterProduct
         adapterProduct.setOnLoadListListener {
             try {
@@ -52,6 +54,13 @@ abstract class AbstractPurchaseFragment : Fragment()  {
 
         adapterProduct.setOnButtonCartClickedListener {
             purchaseService.update(it)
+        }
+
+        val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        sharedViewModel.refreshAction.observe(viewLifecycleOwner) { action ->
+            if (action) {
+                adapterProduct.refresh()
+            }
         }
 
         definePurchaseItemLancher()

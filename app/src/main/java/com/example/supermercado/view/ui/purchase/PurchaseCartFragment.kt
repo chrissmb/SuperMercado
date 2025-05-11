@@ -12,6 +12,7 @@ import com.example.supermercado.R
 import com.example.supermercado.adapter.AdapterPurchase
 import com.example.supermercado.model.Purchase
 import com.example.supermercado.service.ServiceLocator
+import com.example.supermercado.util.MessageUtil
 import com.example.supermercado.util.ServiceCallUtil
 import com.example.supermercado.view.PurchaseItemActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,9 +31,12 @@ class PurchaseCartFragment : AbstractPurchaseFragment() {
 
         val btnCompletePurchase = view.findViewById<FloatingActionButton>(R.id.btn_complete_purchase)
         btnCompletePurchase.setOnClickListener {
-            ServiceCallUtil.treatServiceCall(requireContext(), parentFragmentManager) {
-                getPurchaseService().completePurchase()
-                getAdapterProduct().refresh()
+            val message = requireContext().getString(R.string.message_confirm_purchase_complete);
+            MessageUtil.showMessage(message, requireContext()) {
+                ServiceCallUtil.treatServiceCall(this@PurchaseCartFragment) {
+                    getPurchaseService().completePurchase()
+                    getAdapterProduct().refresh()
+                }
             }
         }
 

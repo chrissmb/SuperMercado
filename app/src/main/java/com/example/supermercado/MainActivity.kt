@@ -49,8 +49,7 @@ class MainActivity : AppCompatActivity() {
 
                 try {
                     val token = loginService.login(username, password, this@MainActivity)
-                    val intent = Intent(this@MainActivity, PrincipalActivity::class.java)
-                    startActivity(intent)
+                    startPrincipalActivity()
                 } catch (e: Exception) {
                     Log.e("LoginError", "Login failed", e)
                     MessageUtil.showMessage(getString(R.string.login_error), this@MainActivity)
@@ -63,13 +62,18 @@ class MainActivity : AppCompatActivity() {
             try {
                 val isExpired = loginService.isTokenExpired(this@MainActivity)
                 if (!isExpired) {
-                    val intent = Intent(this@MainActivity, PrincipalActivity::class.java)
-                    startActivity(intent)
+                    startPrincipalActivity()
                 }
             } catch (e: Exception) {
                 Log.e("TokenError", "Token check failed", e)
             }
             btnEnter.isEnabled = true
         }
+    }
+
+    private fun startPrincipalActivity() {
+        val intent = Intent(this@MainActivity, PrincipalActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 }

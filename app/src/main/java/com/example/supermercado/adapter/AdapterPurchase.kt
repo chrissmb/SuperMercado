@@ -8,16 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.supermercado.R
 import com.example.supermercado.model.Purchase
 import com.example.supermercado.util.ServiceCallUtil
 
-class AdapterPurchase(
-    private val context: Context,
-    private val manager: FragmentManager,
-) : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>() {
+class AdapterPurchase(private val fragment: Fragment) : RecyclerView.Adapter<AdapterPurchase.PurchaseViewHolder>() {
 
     private var purchaseList: MutableList<Purchase> = mutableListOf()
 
@@ -48,16 +46,16 @@ class AdapterPurchase(
         holder.category.text = currentItem.product.category?.name
 
         if (currentItem.cart) {
-            holder.btnCart.text = context.getString(R.string.purchase_cart_delete)
+            holder.btnCart.text = fragment.requireContext().getString(R.string.purchase_cart_delete)
             holder.btnCart.setBackgroundColor(Color.RED)
         } else {
-            holder.btnCart.text = context.getString(R.string.purchase_cart_add)
+            holder.btnCart.text = fragment.requireContext().getString(R.string.purchase_cart_add)
             holder.btnCart.setBackgroundColor(Color.rgb(0, 100,0))
         }
 
         holder.btnCart.setOnClickListener {
             currentItem.cart = !currentItem.cart
-            ServiceCallUtil.treatServiceCall(context, manager) {
+            ServiceCallUtil.treatServiceCall(fragment) {
                 onButtonCartClickedListener.invoke(currentItem)
                 purchaseList.removeAt(position)
                 notifyItemRemoved(position)
@@ -74,7 +72,7 @@ class AdapterPurchase(
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh() {
-        ServiceCallUtil.treatServiceCall(context, manager) {
+        ServiceCallUtil.treatServiceCall(fragment) {
             purchaseList = onLoadList().toMutableList()
             notifyDataSetChanged()
         }
